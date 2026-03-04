@@ -18,6 +18,7 @@ from dotenv import load_dotenv
 BASE_DIR = Path(__file__).parent.parent.resolve()
 ENV_FILE = BASE_DIR / ".env"
 CACHE_FILE = BASE_DIR / ".spotify_cache"
+NETWORKS_CACHE = BASE_DIR / ".wifi_networks_cache"
 PORTAL_REDIRECT_URI = "https://vinil-relay.vercel.app/callback"
 SCOPES = "user-modify-playback-state user-read-playback-state"
 
@@ -32,6 +33,11 @@ load_dotenv(ENV_FILE)
 # ── WiFi helpers ──────────────────────────────────────────────────────────────
 
 def scan_wifi() -> list:
+    if MODE == "setup" and NETWORKS_CACHE.exists():
+        try:
+            return json.loads(NETWORKS_CACHE.read_text())
+        except Exception:
+            pass
     try:
         result = subprocess.run(
             ["nmcli", "-t", "-f", "SSID,SIGNAL,SECURITY",
@@ -45,7 +51,7 @@ def scan_wifi() -> list:
             if len(parts) < 2:
                 continue
             ssid = parts[0].strip()
-            if not ssid or ssid in seen or ssid == "Vinil":
+            if not ssid or ssid in seen or ssid == "Vinil Player Setup":
                 continue
             seen.add(ssid)
             signal = int(parts[1]) if parts[1].isdigit() else 0
