@@ -231,6 +231,22 @@ def settings_spotify_reset():
     return redirect(url_for("setup_spotify"))
 
 
+@app.route("/settings/factory-reset", methods=["POST"])
+def settings_factory_reset():
+    CACHE_FILE.unlink(missing_ok=True)
+    try:
+        subprocess.run(
+            ["sudo", "nmcli", "connection", "delete", get_current_ssid()],
+            capture_output=True, timeout=10
+        )
+    except Exception:
+        pass
+    schedule_reboot(2)
+    return render_template("settings.html",
+                           rebooting=True,
+                           connected=False, current_ssid="", has_token=False)
+
+
 @app.route("/settings/reboot", methods=["POST"])
 def settings_reboot():
     schedule_reboot(2)

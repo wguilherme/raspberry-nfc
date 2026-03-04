@@ -210,6 +210,11 @@
   <form method="POST" action="/settings/reboot">
     <button type="submit" class="btn btn-danger">Reiniciar Vinil</button>
   </form>
+
+  <form method="POST" action="/settings/factory-reset" style="margin-top:0.5rem"
+        onsubmit="return confirm('Isso vai apagar o Wi-Fi e o Spotify e reiniciar do zero. Tem certeza?')">
+    <button type="submit" class="btn btn-danger">Redefinir tudo (factory reset)</button>
+  </form>
   {% endif %}
 
 </div>
