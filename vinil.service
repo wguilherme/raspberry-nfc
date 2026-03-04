@@ -6,9 +6,9 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-User=pi
-WorkingDirectory=/home/pi/vinil
-ExecStart=/usr/bin/python3 /home/pi/vinil/boot.py
+User=wguilherme
+WorkingDirectory=/home/wguilherme/projects/raspberry-nfc
+ExecStart=/usr/bin/python3 /home/wguilherme/projects/raspberry-nfc/boot.py
 Restart=on-failure
 RestartSec=10
 StandardOutput=journal
