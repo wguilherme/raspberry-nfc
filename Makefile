@@ -23,6 +23,13 @@ install-service:
 	sudo systemctl start vinil.service
 	@echo "Serviço instalado e iniciado. Use 'make logs' para acompanhar."
 
+deploy:
+	git pull
+	sudo cp sudoers.d/vinil /etc/sudoers.d/vinil
+	sudo chmod 0440 /etc/sudoers.d/vinil
+	sudo systemctl restart vinil.service
+	@echo "Deploy concluído. Use 'make logs' para acompanhar."
+
 uninstall-service:
 	sudo systemctl stop vinil.service || true
 	sudo systemctl disable vinil.service || true
