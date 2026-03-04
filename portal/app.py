@@ -235,10 +235,23 @@ def settings_spotify_reset():
 def settings_factory_reset():
     CACHE_FILE.unlink(missing_ok=True)
     try:
+        # Desconecta a interface WiFi
         subprocess.run(
-            ["sudo", "nmcli", "connection", "delete", get_current_ssid()],
+            ["sudo", "nmcli", "device", "disconnect", "wlan0"],
             capture_output=True, timeout=10
         )
+        # Remove todos os perfis WiFi salvos (exceto hotspot)
+        result = subprocess.run(
+            ["nmcli", "-t", "-f", "NAME,TYPE", "connection", "show"],
+            capture_output=True, text=True, timeout=5
+        )
+        for line in result.stdout.splitlines():
+            name, _, conn_type = line.partition(":")
+            if conn_type.strip() == "802-11-wireless" and name.strip() != "Hotspot":
+                subprocess.run(
+                    ["sudo", "nmcli", "connection", "delete", name.strip()],
+                    capture_output=True, timeout=10
+                )
     except Exception:
         pass
     schedule_reboot(2)

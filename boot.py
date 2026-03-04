@@ -50,7 +50,7 @@ def check_env_configured() -> bool:
 def start_hotspot():
     print("[boot] Iniciando hotspot 'Vinil'...")
     subprocess.run([
-        "nmcli", "device", "wifi", "hotspot",
+        "sudo", "nmcli", "device", "wifi", "hotspot",
         "ifname", "wlan0",
         "ssid", "Vinil Player Setup",
         "password", "vinil1234"
