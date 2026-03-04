@@ -5,10 +5,10 @@ down:
 	docker compose down
 
 nfc-test:
-	ssh raspberry "python3 ~/vinil/nfc_test.py"
+	python3 nfc_test.py
 
 motor-test:
-	ssh raspberry "python3 ~/vinil/main.py"
+	python3 main.py
 
 spin:
-	ssh raspberry "python3 ~/vinil/spin.py"
+	python3 spin.py
