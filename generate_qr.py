@@ -13,7 +13,7 @@ try:
 except ImportError:
     PIL_AVAILABLE = False
 
-URL = "http://192.168.4.1"
+URL = "http://192.168.4.1:8080"
 OUTPUT = "qrcode.png"
 
 

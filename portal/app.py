@@ -268,5 +268,5 @@ def api_status():
 # ── Entry point ───────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
-    port = 5000 if MODE == "settings" else 80
+    port = 5000 if MODE == "settings" else 8080
     app.run(host="0.0.0.0", port=port, debug=False)
