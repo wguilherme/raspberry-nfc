@@ -8,7 +8,8 @@ setup:
 	sudo apt install -y python3-pip i2c-tools python3-flask
 	sudo pip3 install adafruit-blinka adafruit-circuitpython-pn532 spotipy python-dotenv flask "qrcode[pil]" --break-system-packages
 	sudo raspi-config nonint do_i2c 0
-	@echo "Dependências instaladas. Reinicie para aplicar I2C: sudo reboot"
+	@echo "Dependências instaladas."
+	@[ "$(REBOOT)" = "false" ] || (echo "Reiniciando... (use REBOOT=false para evitar)" && sudo reboot)
 
 qrcode:
 	python3 generate_qr.py
