@@ -261,7 +261,7 @@ def settings_factory_reset():
                 )
     except Exception:
         pass
-    schedule_reboot(2)
+    schedule_restart(2)
     return render_template("settings.html",
                            rebooting=True,
                            connected=False, current_ssid="", has_token=False)
