@@ -30,6 +30,12 @@ deploy:
 	sudo systemctl restart vinil.service
 	@echo "Deploy concluído. Use 'make logs' para acompanhar."
 
+factory-reset:
+	rm -f .spotify_cache .wifi_networks_cache
+	sudo nmcli device disconnect wlan0 || true
+	@nmcli -t -f NAME,TYPE connection show | awk -F: '$$2=="802-11-wireless" && $$1!="Hotspot" {print $$1}' | xargs -I{} sudo nmcli connection delete "{}" || true
+	sudo reboot
+
 uninstall-service:
 	sudo systemctl stop vinil.service || true
 	sudo systemctl disable vinil.service || true
