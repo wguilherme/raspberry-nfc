@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vinil — Configuração</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #111;
+      color: #e8e0d0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .card {
+      background: #1a1a1a;
+      border-radius: 20px;
+      padding: 2rem 1.5rem;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+    }
+
+    /* Logo */
+    .logo { text-align: center; margin-bottom: 1.75rem; }
+    .disc {
+      width: 60px; height: 60px;
+      background: #0a0a0a;
+      border-radius: 50%;
+      border: 3px solid #1DB954;
+      margin: 0 auto 0.6rem;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .disc::after {
+      content: '';
+      width: 14px; height: 14px;
+      background: #1DB954;
+      border-radius: 50%;
+    }
+    .logo h1 { font-size: 1.3rem; letter-spacing: 0.15em; color: #fff; font-weight: 700; }
+    .logo p { font-size: 0.75rem; color: #555; margin-top: 0.2rem; letter-spacing: 0.05em; }
+
+    /* Progress */
+    .progress {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0; margin-bottom: 2rem;
+    }
+    .p-step {
+      display: flex; flex-direction: column; align-items: center; gap: 0.3rem;
+      flex: 1;
+    }
+    .p-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #2a2a2a;
+      border: 2px solid #333;
+      transition: all 0.3s;
+      position: relative; z-index: 1;
+    }
+    .p-dot.active { background: #1DB954; border-color: #1DB954; }
+    .p-dot.done { background: #333; border-color: #444; }
+    .p-label { font-size: 0.65rem; color: #555; text-align: center; }
+    .p-label.active { color: #1DB954; }
+    .p-line {
+      height: 1px; background: #2a2a2a;
+      flex: 1; margin-bottom: 1.1rem;
+      max-width: 40px;
+    }
+    .p-line.done { background: #444; }
+
+    /* Typography */
+    h2 { font-size: 1.15rem; color: #fff; margin-bottom: 0.4rem; }
+    p.sub { font-size: 0.85rem; color: #888; margin-bottom: 1.25rem; line-height: 1.55; }
+
+    /* Error */
+    .error {
+      background: #2a1111;
+      border: 1px solid #6a2020;
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      font-size: 0.85rem;
+      color: #ff8080;
+      margin-bottom: 1rem;
+      line-height: 1.4;
+    }
+
+    /* WiFi list */
+    .wifi-list { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; max-height: 220px; overflow-y: auto; }
+    .wifi-item {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      background: #222; border-radius: 10px;
+      border: 2px solid transparent;
+      cursor: pointer; transition: border-color 0.15s;
+    }
+    .wifi-item:has(input:checked) { border-color: #1DB954; background: #1a2a1a; }
+    .wifi-item input[type="radio"] { accent-color: #1DB954; width: 16px; height: 16px; flex-shrink: 0; }
+    .wifi-name { flex: 1; font-size: 0.9rem; }
+    .wifi-lock { font-size: 0.75rem; color: #555; }
+
+    /* Signal bars */
+    .bars { display: flex; gap: 2px; align-items: flex-end; height: 14px; flex-shrink: 0; }
+    .bars span { width: 3px; background: #333; border-radius: 1px; }
+    .bars span:nth-child(1) { height: 4px; }
+    .bars span:nth-child(2) { height: 7px; }
+    .bars span:nth-child(3) { height: 10px; }
+    .bars span:nth-child(4) { height: 14px; }
+    .bars.s1 span:nth-child(1) { background: #1DB954; }
+    .bars.s2 span:nth-child(1), .bars.s2 span:nth-child(2) { background: #1DB954; }
+    .bars.s3 span:nth-child(1), .bars.s3 span:nth-child(2), .bars.s3 span:nth-child(3) { background: #1DB954; }
+    .bars.s4 span { background: #1DB954; }
+
+    /* Form fields */
+    .field { margin-bottom: 1rem; }
+    .field label { display: block; font-size: 0.78rem; color: #777; margin-bottom: 0.35rem; letter-spacing: 0.03em; }
+    .input-wrap { position: relative; }
+    .field input {
+      width: 100%; background: #222; border: 1px solid #333;
+      border-radius: 10px; padding: 0.8rem 3rem 0.8rem 1rem;
+      color: #e8e0d0; font-size: 0.92rem; outline: none;
+      transition: border-color 0.2s;
+    }
+    .field input:focus { border-color: #1DB954; }
+    .toggle-pw {
+      position: absolute; right: 0.9rem; top: 50%; transform: translateY(-50%);
+      background: none; border: none; color: #555; cursor: pointer;
+      font-size: 0.75rem; padding: 0.25rem;
+    }
+
+    /* Buttons */
+    .btn {
+      display: block; width: 100%; padding: 0.9rem;
+      border-radius: 10px; border: none;
+      font-size: 0.95rem; font-weight: 600; cursor: pointer;
+      text-decoration: none; text-align: center;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn:hover { opacity: 0.88; }
+    .btn-green { background: #1DB954; color: #000; }
+    .btn-outline { background: transparent; color: #888; border: 1px solid #333; margin-top: 0.5rem; font-size: 0.85rem; }
+    .btn + .btn { margin-top: 0.5rem; }
+
+    /* Info box */
+    .info-box {
+      background: #161f16;
+      border: 1px solid #1DB954;
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+      font-size: 0.88rem;
+      line-height: 1.65;
+      margin-bottom: 1.25rem;
+      color: #c0d8c0;
+    }
+    .info-box strong { color: #1DB954; }
+
+    /* Spinner */
+    .spinner {
+      width: 36px; height: 36px;
+      border: 3px solid #2a2a2a;
+      border-top-color: #1DB954;
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+      margin: 1.25rem auto;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Done */
+    .done-icon { text-align: center; font-size: 3rem; margin: 0.5rem 0 1rem; }
+    .note { text-align: center; font-size: 0.8rem; color: #555; margin-top: 1rem; }
+  </style>
+</head>
+<body>
+<div class="card">
+
+  <!-- Logo -->
+  <div class="logo">
+    <div class="disc"></div>
+    <h1>VINIL</h1>
+    <p>NFC ALBUM PLAYER</p>
+  </div>
+
+  <!-- Progress indicator (steps 1–3) -->
+  {% if step in [1, 2, 3] %}
+  <div class="progress">
+    <div class="p-step">
+      <div class="p-dot {% if step == 1 %}active{% elif step > 1 %}done{% endif %}"></div>
+      <span class="p-label {% if step == 1 %}active{% endif %}">Wi-Fi</span>
+    </div>
+    <div class="p-line {% if step > 1 %}done{% endif %}"></div>
+    <div class="p-step">
+      <div class="p-dot {% if step == 2 %}active{% elif step > 2 %}done{% endif %}"></div>
+      <span class="p-label {% if step == 2 %}active{% endif %}">Rede</span>
+    </div>
+    <div class="p-line {% if step > 2 %}done{% endif %}"></div>
+    <div class="p-step">
+      <div class="p-dot {% if step == 3 %}active{% endif %}"></div>
+      <span class="p-label {% if step == 3 %}active{% endif %}">Spotify</span>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- ── Step 1: WiFi picker ── -->
+  {% if step == 1 %}
+  <h2>Conectar ao Wi-Fi</h2>
+  <p class="sub">Escolha sua rede doméstica para o Vinil se conectar.</p>
+
+  {% if error %}<div class="error">{{ error }}</div>{% endif %}
+
+  <form method="POST" action="/setup/wifi">
+    <div class="wifi-list">
+      {% for net in networks %}
+      {% if net.signal > 75 %}{% set sc = "s4" %}
+      {% elif net.signal > 50 %}{% set sc = "s3" %}
+      {% elif net.signal > 25 %}{% set sc = "s2" %}
+      {% else %}{% set sc = "s1" %}{% endif %}
+      <label class="wifi-item">
+        <input type="radio" name="ssid" value="{{ net.ssid }}" required>
+        <span class="wifi-name">{{ net.ssid }}</span>
+        {% if net.secured %}<span class="wifi-lock">🔒</span>{% endif %}
+        <div class="bars {{ sc }}"><span></span><span></span><span></span><span></span></div>
+      </label>
+      {% else %}
+      <p style="color:#555; font-size:0.85rem; padding:0.5rem 0;">Nenhuma rede encontrada. <a href="/" style="color:#1DB954">Atualizar</a></p>
+      {% endfor %}
+    </div>
+
+    <div class="field">
+      <label for="password">Senha da rede</label>
+      <div class="input-wrap">
+        <input type="password" id="password" name="password"
+               placeholder="Deixe vazio se rede aberta" autocomplete="off">
+        <button type="button" class="toggle-pw" onclick="togglePw()">mostrar</button>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-green">Conectar</button>
+  </form>
+  {% endif %}
+
+  <!-- ── Step 2: Reconnect instruction ── -->
+  {% if step == 2 %}
+  <h2>Wi-Fi configurado!</h2>
+  <p class="sub">Agora reconecte seu celular à rede de casa e continue.</p>
+
+  <div class="info-box">
+    <strong>1.</strong> Abra as configurações de Wi-Fi no seu celular<br>
+    <strong>2.</strong> Conecte-se à sua rede doméstica<br>
+    <strong>3.</strong> Volte ao navegador e acesse <strong>raspberry.local</strong>
+  </div>
+
+  {% if rebooting %}
+  <div class="spinner"></div>
+  <p class="note">Reiniciando o Vinil...</p>
+  {% else %}
+  <form method="POST" action="/setup/reboot">
+    <button type="submit" class="btn btn-green">Entendido — Reiniciar</button>
+  </form>
+  {% endif %}
+  {% endif %}
+
+  <!-- ── Step 3: Spotify OAuth ── -->
+  {% if step == 3 %}
+  <h2>Conectar ao Spotify</h2>
+  <p class="sub">Autorize o Vinil a controlar a reprodução na sua conta.</p>
+
+  {% if error %}<div class="error">{{ error }}</div>{% endif %}
+
+  {% if auth_url %}
+  <div class="info-box">
+    Você será redirecionado ao Spotify. Após autorizar, a configuração é concluída automaticamente.
+  </div>
+  <a href="{{ auth_url }}" class="btn btn-green">Conectar Spotify</a>
+  {% endif %}
+  {% endif %}
+
+  <!-- ── Step 4: Done / rebooting ── -->
+  {% if step == 4 %}
+  <div class="done-icon">🎵</div>
+  <h2 style="text-align:center">Tudo pronto!</h2>
+  <p class="sub" style="text-align:center">
+    Configuração concluída. O Vinil está reiniciando em modo player.
+  </p>
+  <div class="spinner"></div>
+  <p class="note">Isso pode levar cerca de 30 segundos.<br>Você pode fechar esta página.</p>
+  {% endif %}
+
+</div>
+
+<script>
+function togglePw() {
+  const input = document.getElementById('password');
+  const btn = document.querySelector('.toggle-pw');
+  if (!input) return;
+  if (input.type === 'password') { input.type = 'text'; btn.textContent = 'ocultar'; }
+  else { input.type = 'password'; btn.textContent = 'mostrar'; }
+}
+</script>
+</body>
+</html>
