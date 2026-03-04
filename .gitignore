@@ -1,5 +1,6 @@
 .env
 .spotify_cache
+.wifi_networks_cache
 __pycache__/
 portal/__pycache__/
 *.pyc
