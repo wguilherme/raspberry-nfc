@@ -135,6 +135,13 @@ def schedule_reboot(delay: int = 3):
     threading.Thread(target=_reboot, daemon=True).start()
 
 
+def schedule_restart(delay: int = 2):
+    def _restart():
+        time.sleep(delay)
+        subprocess.run(["sudo", "systemctl", "restart", "vinil.service"])
+    threading.Thread(target=_restart, daemon=True).start()
+
+
 # ── Routes: Setup Wizard ──────────────────────────────────────────────────────
 
 @app.route("/")
@@ -186,7 +193,7 @@ def spotify_callback():
     success, msg = handle_spotify_callback(code)
     if not success:
         return render_template("setup.html", step=3, error=msg)
-    schedule_reboot(3)
+    schedule_restart(2)
     return render_template("setup.html", step=4)
 
 
