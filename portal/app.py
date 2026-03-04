@@ -18,7 +18,7 @@ from dotenv import load_dotenv
 BASE_DIR = Path(__file__).parent.parent.resolve()
 ENV_FILE = BASE_DIR / ".env"
 CACHE_FILE = BASE_DIR / ".spotify_cache"
-PORTAL_REDIRECT_URI = "http://raspberry.local/callback"
+PORTAL_REDIRECT_URI = "https://vinil-relay.vercel.app/callback"
 SCOPES = "user-modify-playback-state user-read-playback-state"
 
 MODE = os.environ.get("VINIL_MODE", "setup")
